@@ -1,0 +1,46 @@
+version: '3.7'
+services:
+
+    dysregnet-neo4j:
+        image: neo4j:latest
+        container_name: ${COMPOSE_PROJECT_NAME}-neo4j
+        hostname: ${COMPOSE_PROJECT_NAME}-neo4j
+        restart: always
+        #ports:
+        #    - 7474:7474 
+        #    - 7687:7687
+        environment:
+            - NEO4J_AUTH=neo4j/12345678
+
+        volumes:
+            - neo4j-plugins:/plugins
+            - neo4j-data:/data 
+            - neo4j-logs:/logs 
+            - neo4j-import:/var/lib/neo4j/import
+        networks:
+            - network 
+  
+    dysregnet-dash:
+        build: 
+            context: ./
+        container_name: ${COMPOSE_PROJECT_NAME}-dash
+        hostname: ${COMPOSE_PROJECT_NAME}-dash
+        restart: always
+        ports:
+            - 8050:8050
+        networks:
+            - network 
+        links:
+            - dysregnet-neo4j
+    
+
+      
+networks:
+  network:
+    driver: bridge
+    
+volumes:
+    neo4j-plugins:
+    neo4j-data:
+    neo4j-logs:
+    neo4j-import:

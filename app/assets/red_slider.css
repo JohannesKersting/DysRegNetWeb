@@ -1,0 +1,26 @@
+#min_fraction_slider .rc-slider-track {
+  background-color: red;
+}
+
+
+#min_fraction_slider .rc-slider-handle {
+  border-color: red;
+}
+
+#max_regulations_slider .rc-slider-track {
+  background-color: #106cfc;
+}
+
+#max_regulations_slider .rc-slider-handle {
+  border-color: #106cfc;
+}
+
+.rc-slider-rail {
+  background-color: grey;
+}
+
+.Select--multi .Select-value {
+  background-color: #FFFFFF;
+  border-color: #106cfc;
+  color: #106cfc;
+}

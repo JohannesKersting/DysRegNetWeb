@@ -5,7 +5,8 @@ import time
 class NetworkDB:
 
     def __init__(self):
-        self.uri = 'bolt://dysregnet-app-neo4j:7687' #host.docker.internal
+        self.uri = 'bolt://dysregnet-app-neo4j:7687'
+        #self.uri = 'bolt://localhost:7687'
         self.auth = ('neo4j', '12345678')
         self.driver = GraphDatabase.driver(uri=self.uri, auth=self.auth)
 
@@ -97,8 +98,13 @@ class NetworkDB:
 
 
     def get_value(self, command):
-        with self.driver.session() as session:
-            return session.run(command).value()
+        try:
+            with self.driver.session() as session:
+                return session.run(command).value()
+        except Exception as e:
+            print("Database problem:")
+            print(e)
+            return []
 
     def get_values(self, command):
         with self.driver.session() as session:

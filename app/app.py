@@ -29,32 +29,33 @@ app = dash.Dash(server=server, title='DysRegNet', external_stylesheets=[dbc.them
 app.config.suppress_callback_exceptions = True
 
 db = NetworkDB()
-gene_ids = db.get_gene_ids("BRCA")
-cancer_ids = db.get_cancer_ids()
 cyto.load_extra_layouts()
 
 app.layout = dbc.Container([
+    dbc.Alert("Database is unavailable", color="danger", is_open=False, id="db_unavailable", style={'marginTop': '10px'}),
     dbc.Row(dbc.Col(html.H3("DysRegNet"), width='auto'), style={'marginTop': '10px'}),
     dbc.Row([
         dbc.Col([
-            dcc.Dropdown(
-                options=[{'label': cancer_id, 'value': cancer_id} for cancer_id in cancer_ids],
-                multi=False,
-                placeholder="Select cancer type",
-                id='cancer_id_input'
-            ),
+            dbc.Spinner(
+                dcc.Dropdown(
+                    multi=False,
+                    placeholder="Select cancer type",
+                    id='cancer_id_input'
+                ),
+                color="primary"),
         ], xs=12, sm=12, md=3, lg=3, xl=2),
         dbc.Col([
-            dcc.Dropdown(
-                options=[{'label': gene_id, 'value': gene_id} for gene_id in gene_ids],
-                multi=True,
-                placeholder="Select center genes",
-                id='gene_id_input',
-            ),
+            dbc.Spinner(
+                dcc.Dropdown(
+                    multi=True,
+                    placeholder="Select center genes",
+                    id='gene_id_input',
+                ),
+                color="primary"),
         ], xs=12, sm=12, md=9, lg=9, xl=10)
     ]),
     dbc.Row([
-        dbc.Col(get_settings(cancer_ids), xs=12, sm=12, md=3, lg=3, xl=2, ),
+        dbc.Col(get_settings(), xs=12, sm=12, md=3, lg=3, xl=2, ),
         dbc.Col([
             graph
         ], xs=12, sm=12, md=9, lg=9, xl=6),
@@ -64,8 +65,24 @@ app.layout = dbc.Container([
     dcc.Store(id='store_graph', storage_type='memory', data={}),
     dcc.Store(id='store_selection', storage_type='memory', data={'gene_ids': [], 'cancer_id': "", 'compare_id': None}),
     dcc.Store(id='store_compare', storage_type='memory', data=False),
+    dcc.Store(id='dummy', storage_type='memory'),
 
 ], fluid=True)
+
+@app.callback(
+    Output(component_id='gene_id_input', component_property='options'),
+    Output(component_id='cancer_id_input', component_property='options'),
+    Output(component_id='compare_cancer', component_property='options'),
+    Output(component_id='db_unavailable', component_property='is_open'),
+    Input(component_id='dummy', component_property='data'),
+)
+def init_data(dummy):
+    gene_ids = db.get_gene_ids("BRCA")
+    cancer_ids = db.get_cancer_ids()
+    gene_options = [{'label': gene_id, 'value': gene_id} for gene_id in gene_ids]
+    cancer_options = [{'label': cancer_id, 'value': cancer_id} for cancer_id in cancer_ids]
+    is_open = (len(gene_ids) == 0)
+    return gene_options, cancer_options, cancer_options, is_open
 
 app.clientside_callback(
     ClientsideFunction(namespace="clientside", function_name="update_graph"),

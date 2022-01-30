@@ -4,7 +4,7 @@ from dash import html
 import parameters
 
 
-def get_settings(cancer_ids):
+def get_settings():
     settings = [
         dbc.Card(
             dbc.CardBody([
@@ -56,11 +56,12 @@ def get_settings(cancer_ids):
             dbc.CardBody([
                 html.H5('Compare options'),
                 html.Label('Compare to cancer type:'),
-                dcc.Dropdown(
-                    options=[{'label': cancer_id, 'value': cancer_id} for cancer_id in cancer_ids],
-                    multi=False,
-                    id='compare_cancer'
-                ),
+                dbc.Spinner(
+                    dcc.Dropdown(
+                        multi=False,
+                        id='compare_cancer'
+                    ),
+                    color="primary"),
                 html.Br(),
                 dbc.Switch(
                     id="compare_switch",

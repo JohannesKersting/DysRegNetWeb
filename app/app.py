@@ -25,7 +25,7 @@ FONT_AWESOME = (
 )
 
 server = Flask(__name__)
-app = dash.Dash(server=server, title='DysRegNet', external_stylesheets=[dbc.themes.BOOTSTRAP, FONT_AWESOME])
+app = dash.Dash(server=server, title='DysRegNet', external_stylesheets=[dbc.themes.BOOTSTRAP, FONT_AWESOME], requests_pathname_prefix='/dysregnet/')
 app.config.suppress_callback_exceptions = True
 
 db = NetworkDB()

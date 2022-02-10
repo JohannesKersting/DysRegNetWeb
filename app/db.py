@@ -1,3 +1,4 @@
+import os
 from neo4j import GraphDatabase
 from collections import defaultdict
 import time
@@ -5,9 +6,8 @@ import time
 class NetworkDB:
 
     def __init__(self):
-        self.uri = 'bolt://dysregnet-app-neo4j:7687'
-        #self.uri = 'bolt://localhost:7687'
-        self.auth = ('neo4j', '12345678')
+        self.uri = 'bolt://dysregnet-neo4j:7687'
+        self.auth = ('neo4j', os.environ['DB_PASSWORD'])
         self.driver = GraphDatabase.driver(uri=self.uri, auth=self.auth)
 
     def close(self):

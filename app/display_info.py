@@ -1,3 +1,4 @@
+import os
 from dash import html
 import dash_bootstrap_components as dbc
 
@@ -5,7 +6,7 @@ display_info = dbc.Card(
     dbc.CardBody(
         dbc.Row([
             dbc.Col(
-                html.Img(src='/assets/legend_arial.png'),
+                html.Img(src=f'{os.environ["SUBDOMAIN"]}/assets/legend_arial.png'),
                 style={'marginBottom': '15px'},
                 width='auto'
             ),

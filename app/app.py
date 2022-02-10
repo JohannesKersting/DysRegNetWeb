@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 import collections
@@ -25,7 +26,7 @@ FONT_AWESOME = (
 )
 
 server = Flask(__name__)
-app = dash.Dash(server=server, title='DysRegNet', external_stylesheets=[dbc.themes.BOOTSTRAP, FONT_AWESOME], requests_pathname_prefix='/dysregnet/')
+app = dash.Dash(server=server, title='DysRegNet', external_stylesheets=[dbc.themes.BOOTSTRAP, FONT_AWESOME], requests_pathname_prefix=os.environ['SUBDOMAIN'])
 app.config.suppress_callback_exceptions = True
 
 db = NetworkDB()
@@ -287,5 +288,5 @@ def update_dysregulation_plot(n_clicks, elements, selection_data):
 
 
 if __name__ == '__main__':
-    debug = True
+    debug = os.environ['DEBUG'] == "True"
     app.run_server(debug=debug)

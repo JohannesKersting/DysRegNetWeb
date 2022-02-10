@@ -7,21 +7,21 @@ services:
         hostname: ${COMPOSE_PROJECT_NAME}-neo4j
         restart: always
         #ports:
-        #    - 7474:7474 
+        #    - 7474:7474
         #    - 7687:7687
         environment:
-            - NEO4J_AUTH=neo4j/12345678
+            - NEO4J_AUTH=neo4j/{NEO4J_PASSWORD}
 
         volumes:
             - neo4j-plugins:/plugins
-            - neo4j-data:/data 
-            - neo4j-logs:/logs 
+            - neo4j-data:/data
+            - neo4j-logs:/logs
             - neo4j-import:/var/lib/neo4j/import
         networks:
-            - network 
-  
+            - network
+
     dysregnet-dash:
-        build: 
+        build:
             context: ./
         container_name: ${COMPOSE_PROJECT_NAME}-dash
         hostname: ${COMPOSE_PROJECT_NAME}-dash
@@ -29,16 +29,20 @@ services:
         ports:
             - 8050:8050
         networks:
-            - network 
+            - network
         links:
             - dysregnet-neo4j
-    
+        environment:
+            - DEBUG=${DEBUG}
+            - SUBDOMAIN=${SUBDOMAIN}
+            - DB_PASSWORD=${NEO4J_PASSWORD}
 
-      
+
+
 networks:
   network:
     driver: bridge
-    
+
 volumes:
     neo4j-plugins:
     neo4j-data:

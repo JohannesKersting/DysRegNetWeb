@@ -88,6 +88,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
 
                         reg["data"]["diff"] = diff * -1;
 
+
 					}
 					
 					if(Object.keys(gene).length === 0){

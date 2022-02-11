@@ -57,12 +57,12 @@ class NetworkDB:
         query = (
             f"MATCH (r:{cancer_id}_Regulation)\n"
             f"WHERE r.regulation_id IN {regulation_ids}\n"
-            f"RETURN r.fraction\n"
+            f"RETURN r.regulation_id, r.fraction\n"
         )
         start = time.time()
-        fractions = self.get_value(query)
+        fractions = self.get_values(query)
         print("Fraction map transaction time: " + str(time.time()-start))
-        return dict(zip(regulation_ids, fractions))
+        return {fraction[0]: fraction[1] for fraction in fractions}
 
 
     def get_patients(self, regulation_id, cancer_id):

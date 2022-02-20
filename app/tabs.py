@@ -4,18 +4,21 @@ from dash import dcc
 from detail import detail
 from display_info import display_info
 from plots import blank_fig
+from popovers import heading_with_info
 
 tab_info = html.Div([display_info])
 
-tab_mutation = html.Div(
-        dcc.Graph(
-            id='mutation_plot',
-            config={'modeBarButtonsToRemove': ['lasso2d', 'select2d']},
-            figure=blank_fig(),
+tab_mutation = html.Div([
+    dbc.Row(heading_with_info('Gene mutation frequency among patients', 'mutation_info'), className='me-1 ms-1'),
+    dcc.Graph(
+        id='mutation_plot',
+        config={'modeBarButtonsToRemove': ['lasso2d', 'select2d']},
+        figure=blank_fig(),
     )
-)
+], className="mt-3")
 
 tab_methylation = html.Div([
+    dbc.Row(heading_with_info('Patient-specific promoter methylation heatmap', 'methylation_info'), className='me-1 ms-1'),
     dbc.Spinner([
         dbc.Row(
             dcc.Graph(
@@ -39,9 +42,10 @@ tab_methylation = html.Div([
             )
         )
     ], color="primary"),
-])
+], className="mt-3")
 
 tab_dysregulation = html.Div([
+    dbc.Row(heading_with_info('Patient-specific dysregulation heatmap', 'dysregulation_info'), className='me-1 ms-1'),
     dbc.Spinner([
         dbc.Row(
             dcc.Graph(
@@ -65,7 +69,7 @@ tab_dysregulation = html.Div([
             )
         )
     ], color="danger"),
-])
+], className="mt-3")
 
 
 tabs = html.Div([

@@ -1,14 +1,16 @@
 import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html
+
 import parameters
+from popovers import info_button, heading_with_info
 
 
 def get_settings():
     settings = [
         dbc.Card(
             dbc.CardBody([
-                html.H5('Display options'),
+                heading_with_info('Display options', 'display_options_info'),
                 html.Label('Minimum dysregulation fraction:'),
                 dcc.Slider(
                     id='min_fraction_slider',
@@ -54,14 +56,15 @@ def get_settings():
 
         dbc.Card(
             dbc.CardBody([
-                html.H5('Compare options'),
+                heading_with_info('Compare options', 'compare_options_info'),
                 html.Label('Compare to cancer type:'),
                 dbc.Spinner(
                     dcc.Dropdown(
                         multi=False,
-                        id='compare_cancer'
+                        id='compare_cancer',
                     ),
-                    color="primary"),
+                    color="primary",
+                ),
                 html.Br(),
                 dbc.Switch(
                     id="compare_switch",
@@ -74,19 +77,19 @@ def get_settings():
 
         dbc.Card(
             dbc.CardBody([
-                html.H5('Downloads'),
+                heading_with_info('Downloads', 'downloads_info'),
                 html.Div(
                     [
                         dbc.Button(children=[html.I(className="fa fa-download mr-1"), " Download full graph (.csv)"],
-                                   id="btn_download_graph_full", outline=True, color="primary",
-                                   className="me-1", style={'textAlign': 'left'}, size="sm"),
+                            id="btn_download_graph_full", outline=True, color="primary",
+                            style={'textAlign': 'left'}, size="sm"),
                         dbc.Button(
                             children=[html.I(className="fa fa-download mr-1"), " Download displayed graph (.csv)"],
                             id="btn_download_graph_displayed", outline=True, color="primary",
-                            className="me-1", style={'textAlign': 'left'}, size="sm"),
+                            style={'textAlign': 'left'}, size="sm"),
                         dbc.Button(children=[html.I(className="fa fa-download mr-1"), " Download graph image (.png)"],
-                                   id="btn_download_graph_png", outline=True, color="primary",
-                                   className="me-1", style={'textAlign': 'left'}, size="sm"),
+                            id="btn_download_graph_png", outline=True, color="primary",
+                            style={'textAlign': 'left'}, size="sm"),
                     ],
                     className="d-grid gap-2",
                 ),

@@ -18,6 +18,7 @@ from settings import get_settings
 from detail import detail, node_detail, edge_detail
 from tabs import tabs
 from plots import methylation_heatmap, mutation_bar, dysregulation_heatmap
+from popovers import get_popovers
 import neo4j2Store
 import neo4j2csv
 
@@ -25,8 +26,9 @@ FONT_AWESOME = (
     "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
 )
 
+
 server = Flask(__name__)
-app = dash.Dash(server=server, title='DysRegNet', external_stylesheets=[dbc.themes.BOOTSTRAP, FONT_AWESOME], requests_pathname_prefix=os.environ['SUBDOMAIN'])
+app = dash.Dash(server=server, title='DysRegNet', external_stylesheets=[dbc.themes.BOOTSTRAP, FONT_AWESOME], requests_pathname_prefix=os.getenv('SUBDOMAIN', '/'))
 app.config.suppress_callback_exceptions = True
 
 db = NetworkDB()
@@ -44,23 +46,23 @@ app.layout = dbc.Container([
                     id='cancer_id_input'
                 ),
                 color="primary"),
-        ], xs=12, sm=12, md=3, lg=3, xl=2),
+        ], xs=12, sm=12, md=12, lg=3, xl=3, xxl=2),
         dbc.Col([
             dbc.Spinner(
                 dcc.Dropdown(
                     multi=True,
-                    placeholder="Select center genes",
+                    placeholder="Select query genes",
                     id='gene_id_input',
                 ),
                 color="primary"),
-        ], xs=12, sm=12, md=9, lg=9, xl=10)
+        ], xs=12, sm=12, md=12, lg=9, xl=9, xxl=10)
     ]),
     dbc.Row([
-        dbc.Col(get_settings(), xs=12, sm=12, md=3, lg=3, xl=2, ),
+        dbc.Col(get_settings(), xs=12, sm=12, md=12, lg=3, xl=3, xxl=2),
         dbc.Col([
             graph
-        ], xs=12, sm=12, md=9, lg=9, xl=6),
-        dbc.Col([detail, tabs], xs=12, sm=12, md=12, lg=12, xl=4),
+        ], xs=12, sm=12, md=12, lg=9, xl=9, xxl=5),
+        dbc.Col([detail, tabs], xs=12, sm=12, md=12, lg=12, xl=12, xxl=5),
     ], style={'marginTop': '15px', 'marginBottom': '10px', 'height': '85vh'}),
 
     dcc.Store(id='store_graph', storage_type='memory', data={}),
@@ -68,7 +70,7 @@ app.layout = dbc.Container([
     dcc.Store(id='store_compare', storage_type='memory', data=False),
     dcc.Store(id='dummy', storage_type='memory'),
 
-], fluid=True)
+] + get_popovers(), fluid=True)
 
 @app.callback(
     Output(component_id='gene_id_input', component_property='options'),
@@ -288,5 +290,5 @@ def update_dysregulation_plot(n_clicks, elements, selection_data):
 
 
 if __name__ == '__main__':
-    debug = os.environ['DEBUG'] == "True"
+    debug = os.getenv('DEBUG', 'True') == "True"
     app.run_server(debug=debug)

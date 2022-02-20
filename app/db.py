@@ -6,8 +6,12 @@ import time
 class NetworkDB:
 
     def __init__(self):
-        self.uri = 'bolt://dysregnet-neo4j:7687'
-        self.auth = ('neo4j', os.environ['DB_PASSWORD'])
+        uri = 'bolt://dysregnet-neo4j:7687'
+        pw = os.getenv('DB_PASSWORD', "12345678")
+        if os.getenv('DB_PASSWORD') is None:
+            uri = 'bolt://localhost:7687'
+        self.uri = uri
+        self.auth = ('neo4j', pw)
         self.driver = GraphDatabase.driver(uri=self.uri, auth=self.auth)
 
     def close(self):
@@ -64,7 +68,6 @@ class NetworkDB:
         print("Fraction map transaction time: " + str(time.time()-start))
         return {fraction[0]: fraction[1] for fraction in fractions}
 
-
     def get_patients(self, regulation_id, cancer_id):
         query = f"MATCH (patient:{cancer_id}_Patient) -[dysregulation:DYSREGULATED]-> (:{cancer_id}_Regulation {{regulation_id: '{regulation_id}'}}) RETURN patient, dysregulation.value AS dysregulation"
         start = time.time()
@@ -95,7 +98,6 @@ class NetworkDB:
         result = self.get_values(query)
         print("Dysregulation transaction time: " + str(time.time()-start))
         return result
-
 
     def get_value(self, command):
         try:

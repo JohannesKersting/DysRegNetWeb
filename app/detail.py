@@ -1,5 +1,6 @@
 from dash import html
 import dash_bootstrap_components as dbc
+from popovers import heading_with_info, get_gene_popover, get_regulation_popover
 
 
 detail = html.Div(
@@ -11,6 +12,7 @@ detail = html.Div(
         className="mb-3",
     ),
     id='detail')
+
 
 
 def node_detail(node, cancer_id, is_center):
@@ -31,20 +33,20 @@ def node_detail(node, cancer_id, is_center):
         meth_opacity = 1
         meth_label = node['methylation']
 
-
     detail_card = dbc.Card(
         dbc.CardBody(
             [
-                html.H5('Gene', className="card-title"),
+                heading_with_info('Gene', 'gene_info'),
+                get_gene_popover(),
                 dbc.Row(html.Label(f"Cancer: {cancer_id}")),
                 dbc.Row(html.Label(f"Gene: {node['id']}")),
                 dbc.Row(
                     html.Div([
-                        html.Label('Mean promotor methylation:', style={'marginRight': '10px'}),
+                        html.Label('Promoter methylation:', style={'marginRight': '10px'}),
                         html.Label(meth_label, style={'opacity': meth_opacity})
                     ],style={'display': 'flex'})
                 ),
-                dbc.Row(html.Label(f"Mutation frequency among patients: {node['mutation']}")),
+                dbc.Row(html.Label(f"Mutation frequency: {node['mutation']}")),
                 html.Div([
                     dbc.Button([html.I(className="fa fa-crosshairs mr-1"), " Choose as query"], outline=True,
                                color="primary", className="me-1", value=node['id'],
@@ -85,7 +87,8 @@ def edge_detail(edge, cancer_id, compare, compare_cancer):
     detail_card = dbc.Card(
         dbc.CardBody(
             [
-                dbc.Row(html.H5(f'Regulation ({"Activation" if edge["classes"] == "a" else "Repression"})')),
+                dbc.Row(heading_with_info(f'Regulation ({"Activation" if edge["classes"] == "a" else "Repression"})','regulation_info')),
+                get_regulation_popover(),
                 dbc.Row(html.Label(f"Cancer: {cancer_id}")),
                 dbc.Row(html.Label(f"Source: {edge['source']}")),
                 dbc.Row(html.Label(f"Target: {edge['target']}")),

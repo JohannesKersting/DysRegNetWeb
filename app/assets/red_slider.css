@@ -24,3 +24,7 @@
   border-color: #106cfc;
   color: #106cfc;
 }
+
+.popover {
+    max-width: 400px;
+}

@@ -2,6 +2,19 @@ import dash_bootstrap_components as dbc
 from dash import html
 from dash import dcc
 
+cancer_map = {
+        'LUAD': 'Lung adenocarcinoma',
+        'BRCA': 'Breast invasive carcinoma',
+        'COAD': 'Colon adenocarcinoma',
+        'HNSC': 'Head and Neck squamous cell carcinoma',
+        'KIRC': 'Kidney renal clear cell carcinoma',
+        'KIRP': 'Kidney renal papillary cell carcinoma',
+        'LIHC': 'Liver hepatocellular carcinoma',
+        'LUSC': 'Lung squamous cell carcinoma',
+        'PRAD': 'Prostate adenocarcinoma',
+        'STAD': 'Stomach adenocarcinoma',
+        'THCA': 'Thyroid carcinoma',
+    }
 
 def get_popovers():
     popovers = [
@@ -85,6 +98,10 @@ def get_popovers():
             dcc.Markdown(
                 '''
                 ##### Display info
+                **Selected cancer type:**
+                Displays the currently selected TCGA study. A full list of the abbreviations can be found 
+                [here](https://gdc.cancer.gov/resources-tcga-users/tcga-code-tables/tcga-study-abbreviations).
+                
                 **Target/Source regulations:**
                 A query genes outgoing edges are considered target regulations, incoming edges source regulations. 
                 For both types the first number corresponds to the amount of currently displayed edges, the second to 
@@ -228,3 +245,9 @@ def heading_with_info(text, popover_id):
             html.Div(info_button(popover_id))
         ],  className="d-grid gap-2 mb-2 d-md-flex justify-content-md-between"
     )
+
+def get_cancer_map():
+    return cancer_map
+
+def map_cancer(cancer):
+    return cancer_map.get(cancer)

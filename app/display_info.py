@@ -16,6 +16,8 @@ display_info = dbc.Card(
                 dbc.Col([
                         dbc.Row([
                             html.B("Selected cancer type:", style={'marginRight': '10px'}),
+                        ]),
+                        dbc.Row([
                             html.Label("None", id="displayed_cancer"),
                         ]),
                         dbc.Row([

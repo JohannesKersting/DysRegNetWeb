@@ -18,7 +18,7 @@ from settings import get_settings
 from detail import detail, node_detail, edge_detail
 from tabs import tabs
 from plots import methylation_heatmap, mutation_bar, dysregulation_heatmap
-from popovers import get_popovers
+from popovers import get_popovers, get_cancer_map
 import neo4j2Store
 import neo4j2csv
 
@@ -82,8 +82,9 @@ app.layout = dbc.Container([
 def init_data(dummy):
     gene_ids = db.get_gene_ids("BRCA")
     cancer_ids = db.get_cancer_ids()
+    cancer_map = get_cancer_map()
     gene_options = [{'label': gene_id, 'value': gene_id} for gene_id in gene_ids]
-    cancer_options = [{'label': cancer_id, 'value': cancer_id} for cancer_id in cancer_ids]
+    cancer_options = [{'label': cancer_id, 'value': cancer_id, 'title': cancer_map.get(cancer_id)} for cancer_id in cancer_ids]
     is_open = (len(gene_ids) == 0)
     return gene_options, cancer_options, cancer_options, is_open
 
@@ -113,9 +114,9 @@ app.clientside_callback(
 )
 def update_selection_data(selected_gene_ids, cancer_id, selection_data):
     if selected_gene_ids is not None and cancer_id is not None:
-        if collections.Counter(selected_gene_ids) != collections.Counter(selection_data['gene_ids']) or cancer_id != \
-                selection_data['cancer_id']:
-            return {'gene_ids': selected_gene_ids, 'cancer_id': cancer_id}, cancer_id, len(selected_gene_ids)
+        if collections.Counter(selected_gene_ids) != collections.Counter(selection_data['gene_ids']) or cancer_id != selection_data['cancer_id']:
+            displayed_cancer = f'{cancer_id} ({get_cancer_map().get(cancer_id)})'
+            return {'gene_ids': selected_gene_ids, 'cancer_id': cancer_id}, displayed_cancer, len(selected_gene_ids)
     raise dash.exceptions.PreventUpdate
 
 

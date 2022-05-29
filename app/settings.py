@@ -80,7 +80,7 @@ def get_settings():
                 heading_with_info('Downloads', 'downloads_info'),
                 html.Div(
                     [
-                        dbc.Button(children=[html.I(className="fa fa-download mr-1"), " Download full graph (.csv)"],
+                        dbc.Button(children=[html.I(className="fa fa-download mr-1"), " Download queried graph (.csv)"],
                             id="btn_download_graph_full", outline=True, color="primary",
                             style={'textAlign': 'left'}, size="sm"),
                         dbc.Button(

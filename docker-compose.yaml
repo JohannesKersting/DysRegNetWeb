@@ -14,7 +14,7 @@ services:
 
         volumes:
             - neo4j-plugins:/plugins
-            - neo4j-data:/data
+            - ${PWD}/data/:/data
             - neo4j-logs:/logs
             - neo4j-import:/var/lib/neo4j/import
         networks:
@@ -45,6 +45,5 @@ networks:
 
 volumes:
     neo4j-plugins:
-    neo4j-data:
     neo4j-logs:
     neo4j-import:

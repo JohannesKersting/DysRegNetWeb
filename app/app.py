@@ -80,7 +80,7 @@ app.layout = dbc.Container([
     Input(component_id='dummy', component_property='data'),
 )
 def init_data(dummy):
-    gene_ids = db.get_gene_ids("BRCA")
+    gene_ids = db.get_gene_ids("THCA")
     cancer_ids = db.get_cancer_ids()
     cancer_map = get_cancer_map()
     gene_options = [{'label': gene_id, 'value': gene_id} for gene_id in gene_ids]

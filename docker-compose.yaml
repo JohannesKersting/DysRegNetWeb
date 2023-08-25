@@ -2,7 +2,7 @@ version: '3.7'
 services:
 
     dysregnet-neo4j:
-        image: neo4j:latest
+        image: neo4j:5.11.0
         container_name: ${COMPOSE_PROJECT_NAME}-neo4j
         hostname: ${COMPOSE_PROJECT_NAME}-neo4j
         restart: always

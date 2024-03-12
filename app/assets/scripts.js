@@ -131,7 +131,12 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
 			else{
 				return [window.dash_clientside.no_update, window.dash_clientside.no_update, 0, 0, window.dash_clientside.no_update];
 			}
-        }
+        },
+
+		open_drugstone_link: function(drugstone_link) {
+			window.open(drugstone_link);
+			return window.dash_clientside.no_update;
+		}
 
     }
 });

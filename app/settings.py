@@ -96,8 +96,23 @@ def get_settings():
             ]),
             className="mt-3 mb-3"
         ),
+        dbc.Card(
+            dbc.CardBody([
+                heading_with_info('Drug repurposing', 'repurposing_info'),
+                html.Div(
+                    [
+                        dbc.Button(children=[html.I(className="fa fa-external-link mr-1"), " Drugst.One"],
+                                   id="btn_export_drugstone", outline=True, color="primary",
+                                   style={'textAlign': 'left'}, size="sm"),
+                    ],
+                    className="d-grid gap-2",
+                ),
+            ]),
+            className="mt-3 mb-3"
+        ),
 
         dcc.Download(id="download_graph_full"),
         dcc.Download(id="download_graph_displayed"),
+        dcc.Store(id='store_drugstone_link', storage_type='memory'),
     ]
     return settings

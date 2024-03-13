@@ -11,6 +11,7 @@ import dash_cytoscape as cyto
 from dash.dependencies import Input, Output, State, ClientsideFunction
 from dash import html
 from flask import Flask
+import requests
 
 from db import NetworkDB
 from graph import graph
@@ -288,6 +289,42 @@ def update_dysregulation_plot(n_clicks, elements, selection_data):
             return dysregulation_heatmap(data), [html.I(className="fa fa-refresh mr-1"), " Refresh"]
 
     raise dash.exceptions.PreventUpdate
+
+
+@app.callback(
+    Output(component_id='store_drugstone_link', component_property='data'),
+    Input(component_id='btn_export_drugstone', component_property='n_clicks'),
+    State(component_id='graph', component_property='elements'),
+    State(component_id='graph', component_property='selectedNodeData'),
+    prevent_initial_call=True
+)
+def get_drugstone_link(n_clicks, elements, selected_nodes):
+    if n_clicks > 0 and elements is not None:
+
+        if selected_nodes:
+            # use selected nodes, if available
+            nodes = [{"id": node['id']} for node in selected_nodes]
+        else:
+            # select all nodes in the graph, if not
+            nodes = [{"id": element['data']['id']} for element in elements if 'regulation_id' not in element['data']]
+
+        data = {"network": {"nodes": nodes}}
+
+        # send request to drugstone
+        url = 'https://api.drugst.one/create_network'
+        r = requests.post(url, json=data)
+        id = r.text.strip('"')
+        result_url = f'https://drugst.one?id={id}'
+        get_r = requests.get(result_url)
+        return get_r.url
+    raise dash.exceptions.PreventUpdate
+
+app.clientside_callback(
+    ClientsideFunction(namespace="clientside", function_name="open_drugstone_link"),
+    Output(component_id='btn_export_drugstone', component_property='children'),
+    Input(component_id='store_drugstone_link', component_property='data'),
+    prevent_initial_call=True,
+)
 
 
 if __name__ == '__main__':

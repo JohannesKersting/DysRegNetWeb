@@ -97,6 +97,21 @@ def get_popovers():
         dbc.Popover(
             dcc.Markdown(
                 '''
+                ##### Drug repurposing 
+                **Drugst.One:**
+                Export the currently displayed network to [Drugst.One](https://drugst.one/home)
+                for drug repurposing analysis. If one or more nodes are currently selected (highlighted in blue), 
+                only those will be exported.
+                ''',
+            ),
+            target='repurposing_info',
+            body=True,
+            trigger='legacy',
+            placement='auto',
+        ),
+        dbc.Popover(
+            dcc.Markdown(
+                '''
                 ##### Display info
                 **Selected cancer type:**
                 Displays the currently selected TCGA study. A full list of the abbreviations can be found 

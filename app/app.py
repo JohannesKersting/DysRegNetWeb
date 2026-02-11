@@ -37,7 +37,47 @@ cyto.load_extra_layouts()
 
 app.layout = dbc.Container([
     dbc.Alert("Database is unavailable", color="danger", is_open=False, id="db_unavailable", style={'marginTop': '10px'}),
-    dbc.Row(dbc.Col(html.H3("DysRegNet"), width='auto'), style={'marginTop': '10px'}),
+    dbc.Row(
+        [
+            # Left column: Title
+            dbc.Col(
+                html.H3("DysRegNet", className="mb-0"),
+                width="auto",
+            ),
+
+            # Right column: Buttons
+            dbc.Col(
+                [
+                    dbc.Button(
+                        children=[html.I(className="fa fa-code"), " Python package"],
+                        href="https://github.com/daisybio/DysRegNet_package",
+                        target="_blank",
+                        color="primary",
+                        outline=True,
+                    ),
+                    dbc.Button(
+                        children=[html.I(className="fa fa-file-text"), " Publication"],
+                        href="https://doi.org/10.1111/bph.17395",
+                        target="_blank",
+                        color="primary",
+                        outline=True,
+                    ),
+                    dbc.Button(
+                        children=[html.I(className="fa fa-info-circle"), " Imprint"],
+                        href="https://www.mls.ls.tum.de/daisybio/impressum/",
+                        target="_blank",
+                        color="primary",
+                        outline=True,
+                    ),
+                ],
+                width="auto",
+                className="d-flex gap-2",
+            ),
+        ],
+        justify="between",
+        align="center",
+        style={"marginTop": "10px", "marginBottom": "10px"},
+    ),
     dbc.Row([
         dbc.Col([
             dbc.Spinner(
